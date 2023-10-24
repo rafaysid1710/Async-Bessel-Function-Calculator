@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Async Bessel Function Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background-color 0.3s;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #007bff;
+      transition: color 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Async Bessel Function Calculator</h1>
+    <label for="xInput">Enter x:</label>
+    <input type="number" id="xInput" step="0.01" placeholder="Enter x value">
+    <button id="calculateButton">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    class AsyncBesselFunction {
+      static async calculateBesselJ2(x) {
+        const A1 = await this.calculateA1(x);
+        const A2 = await this.calculateA2(x);
+        const A3 = await this.calculateA3(x);
+        const A4 = await this.calculateA4(x);
+        const A5 = await this.calculateA5(x);
+        const A6 = await this.calculateA6(x);
+        const A7 = A1 - A2 + A3 - A4 + A5 - A6;
+
+        return A7;
+      }
+
+      static async calculateA1(x) {
+        return x * x;
+      }
+
+      static async calculateA2(x) {
+        return Math.pow(x, 4);
+      }
+
+      static async calculateA3(x) {
+        return Math.pow(x, 2) / Math.pow(2, 2);
+      }
+
+      static async calculateA4(x) {
+        return Math.pow(x, 4) / Math.pow(4, 2);
+      }
+
+      static async calculateA5(x) {
+        return Math.pow(x, 2) / Math.pow(3, 2);
+      }
+
+      static async calculateA6(x) {
+        return Math.pow(x, 4) / Math.pow(5, 2);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const xInput = document.getElementById("xInput");
+      const calculateButton = document.getElementById("calculateButton");
+      const resultDiv = document.getElementById("result");
+
+      calculateButton.addEventListener("click", async () => {
+        const x = parseFloat(xInput.value);
+        if (!isNaN(x)) {
+          resultDiv.textContent = "Calculating...";
+          try {
+            const result = await AsyncBesselFunction.calculateBesselJ2(x);
+            resultDiv.textContent = `Bessel Function J2(${x}) = ${result}`;
+          } catch (error) {
+            resultDiv.textContent = "Error: " + error.message;
+          }
+        } else {
+          resultDiv.textContent = "Please enter a valid number for x.";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
